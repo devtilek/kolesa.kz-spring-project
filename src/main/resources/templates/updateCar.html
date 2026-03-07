@@ -1,0 +1,45 @@
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}"
+>
+<div layout:fragment="arguments">
+    <form th:action="@{'/update'}" method="post">
+        <div class="mb-3">
+            <input type="hidden" name="car_id" th:value="${car.id}">
+            <label  class="form-label">Car's Name</label>
+            <input type="text" class="form-control" name="name" th:value="${car.name}">
+        </div>
+        <div class="mb-3">
+            <label  class="form-label">Car's Price</label>
+            <input type="number" class="form-control" name="price" th:value="${car.price}">
+        </div>
+        <div class="mb-3">
+            <label  class="form-label">Car's Description</label>
+            <input type="text" class="form-control" name="desc" th:value="${car.description}">
+        </div>
+        <div class="mb-3">
+            <select name="country_id">
+                <option th:each="countryFlag : ${countries}" th:value="${countryFlag.id}" th:text="${countryFlag.name}"
+                th:selected="${countryFlag.id} == ${car.country.id}"></option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Car's Photo URL</label>
+            <textarea class="form-control" rows="3" name="url" th:value="${car.url}"></textarea>
+        </div>
+        <div class="mb-3">
+            <button class="btn btn-primary">
+                Save Car
+            </button>
+        </div>
+    </form>
+    <form th:action="@{'/delete'}" method="post">
+        <input type="hidden" name="car_id" th:value="${car.id}">
+        <button class="btn btn-danger">
+            Delete Car
+        </button>
+    </form>
+</div>
+</html>
