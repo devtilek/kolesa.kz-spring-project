@@ -5,6 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import practice.kolesokz.Entities.Country;
+import practice.kolesokz.dto.CountryRequest;
+import practice.kolesokz.dto.CountryResponse;
+import practice.kolesokz.mapper.CountryMapper;
 import practice.kolesokz.services.CountryService;
 
 import java.net.URI;
@@ -16,21 +19,25 @@ import java.util.List;
 public class CountryRestController {
 
     private final CountryService countryService;
+    private final CountryMapper countryMapper;
 
     @GetMapping
-    public List<Country> findAll() {
-        return countryService.findAll();
+    public List<CountryResponse> findAll() {
+        return countryService.findAll().stream()
+                .map(countryMapper::toResponse)
+                .toList();
     }
 
     @GetMapping("/{id}")
-    public Country findById(@PathVariable Long id) {
-        return countryService.findById(id);
+    public CountryResponse findById(@PathVariable Long id) {
+        return countryMapper.toResponse(countryService.findById(id));
     }
 
     @PostMapping
-    public ResponseEntity<Country> create(@Valid @RequestBody Country country) {
-        Country saved = countryService.create(country);
-        return ResponseEntity.created(URI.create("/api/countries/" + saved.getId())).body(saved);
+    public ResponseEntity<CountryResponse> create(@Valid @RequestBody CountryRequest request) {
+        Country saved = countryService.create(countryMapper.toEntity(request));
+        return ResponseEntity.created(URI.create("/api/countries/" + saved.getId()))
+                .body(countryMapper.toResponse(saved));
     }
 
     @DeleteMapping("/{id}")
