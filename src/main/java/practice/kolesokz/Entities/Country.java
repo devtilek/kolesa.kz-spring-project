@@ -11,7 +11,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "countries")
+@Table(name = "t_country")
 @AllArgsConstructor
 @NoArgsConstructor
 public class Country {
