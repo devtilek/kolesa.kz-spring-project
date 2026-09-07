@@ -1,13 +1,17 @@
 package practice.kolesokz.Entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table
+@Table(name = "cars")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -16,21 +20,27 @@ public class Car {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column
     private Long id;
 
-    @Column
+    @NotBlank
+    @Size(max = 150)
+    @Column(nullable = false, length = 150)
     private String name;
 
-    @Column
+    @DecimalMin(value = "0.0", inclusive = false)
+    @Column(nullable = false)
     private double price;
 
-    @Column
+    @Size(max = 1000)
+    @Column(length = 1000)
     private String url;
 
+    @Size(max = 5000)
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "country_id", nullable = false)
     private Country country;
 }
